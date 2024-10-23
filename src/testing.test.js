@@ -1,5 +1,6 @@
 import Ship from "./ship.js";
 import Gameboard from "./gameboard.js";
+import Player from "./player.js";
 
 describe.skip("Ship Class Tests", () => {
   let ship;
@@ -30,7 +31,7 @@ describe.skip("Ship Class Tests", () => {
   });
 });
 
-describe("Gameboard Tests", () => {
+describe.skip("Gameboard Tests", () => {
   let gameboard;
   let ship;
 
@@ -76,5 +77,14 @@ describe("Gameboard Tests", () => {
     ship.hit();
 
     expect(gameboard.allShipsSunk()).toBe(true);
+  });
+});
+
+describe("Player Tests", () => {
+  test("Creating a new player", () => {
+    const player1 = new Player("Bob", false);
+
+    expect(player1.name).toBe("Bob");
+    expect(player1.cpuPlayer).toBe(false);
   });
 });

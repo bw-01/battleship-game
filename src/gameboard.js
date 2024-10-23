@@ -14,7 +14,7 @@ class Gameboard {
     this.ships = []; // holds the ships on the board
   }
 
-  placeShip(ship, x, y, length = 2, direction = "horizontal") {
+  placeShip(ship, x, y, length, direction) {
     if (direction === "horizontal" && x + length > this.size) {
       throw new Error("Ship goes out of bounds horizontally!");
     }
