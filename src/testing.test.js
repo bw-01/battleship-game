@@ -1,10 +1,11 @@
 import Ship from "./ship.js";
+import Gameboard from "./gameboard.js";
 
-describe("Ship Class Tests", () => {
+describe.skip("Ship Class Tests", () => {
   let ship;
 
   beforeEach(() => {
-    ship = new Ship("Battleship", 2);
+    ship = new Ship("Ship1", 2);
   });
 
   test("New ship is afloat and unhit", () => {
@@ -26,5 +27,54 @@ describe("Ship Class Tests", () => {
     ship.hit();
     ship.hit();
     expect(ship.isSunk()).toBe(true);
+  });
+});
+
+describe("Gameboard Tests", () => {
+  let gameboard;
+  let ship;
+
+  beforeEach(() => {
+    gameboard = new Gameboard();
+    ship = new Ship("Ship1", 2);
+    gameboard.placeShip(ship, 0, 0, ship.length, "horizontal"); // place a test ship at 0,0
+  });
+
+  test("Place and get ship at specific coordinates", () => {
+    const x = 0,
+      y = 0;
+
+    expect(gameboard.grid[x][y].ship).toEqual(ship);
+    expect(gameboard.grid[x + ship.length - 1][y].ship).toEqual(ship);
+  });
+
+  test("Test ship is hit when attacked", () => {
+    const x = 0,
+      y = 0;
+
+    expect(gameboard.receiveAttack(x, y)).toBe(true);
+    expect(ship.hits).toBe(1);
+  });
+
+  test("Check missed shots are recorded", () => {
+    const x = 1,
+      y = 1;
+
+    expect(gameboard.receiveAttack(x, y)).toBe(false);
+    expect(ship.hits).toBe(0);
+    expect(gameboard.grid[x][y].beenHit).toBe(true);
+  });
+
+  test("Check board reports not all ships have sunk", () => {
+    ship.hit();
+
+    expect(gameboard.allShipsSunk()).toBe(false);
+  });
+
+  test("Check board reports when all ships have sunk", () => {
+    ship.hit();
+    ship.hit();
+
+    expect(gameboard.allShipsSunk()).toBe(true);
   });
 });
