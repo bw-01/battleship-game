@@ -28,3 +28,37 @@ a {
 * {
   border: 1px solid blue;
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contents {
+  display: flex;
+}
+
+.gameboard {
+  display: grid;
+  grid-template-columns: repeat(10, 30px);
+  grid-template-rows: repeat(10, 30px);
+}
+
+.cell {
+  width: 30px;
+  height: 30px;
+  background-color: aqua;
+}
+
+.ship {
+  background-color: grey;
+}
+
+.hit {
+  background-color: red;
+}
+
+.miss {
+  background-color: black;
+}

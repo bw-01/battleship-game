@@ -1,6 +1,6 @@
 //import Ship from "./ship.js";
 
-// Create and update the game board
+// Create and manage the game board
 class Gameboard {
   constructor(size = 10) {
     this.size = size; // size of the board
@@ -45,14 +45,13 @@ class Gameboard {
 
   receiveAttack(x, y) {
     const cell = this.grid[x][y];
-    if (cell.beenHit) {
-      // already attached
-      return false;
+    if (cell.alreadyHit) {
+      return false; // already attached this cell so do nothing
     }
 
-    cell.beenHit = true;
+    cell.alreadyHit = true;
 
-    if (cell.ship) {
+    if (cell.hasShip()) {
       cell.ship.hit();
       return true; // hit
     } else {
@@ -61,15 +60,19 @@ class Gameboard {
   }
 
   allShipsSunk() {
-    return this.ships.every(ship => ship.isSunk());
+    return this.ships.every((ship) => ship.isSunk());
   }
 }
 
-// Store the status of each grid cell
+// Store if a cell is hit and any ship it might contain
 class Cell {
   constructor() {
-    this.ship = null;
-    this.beenHit = false;
+    this.ship = null; // holds ship object if placed in cell
+    this.alreadyHit = false; // store if cell has been hit previously
+  }
+
+  hasShip() {
+    return this.ship !== null;
   }
 }
 

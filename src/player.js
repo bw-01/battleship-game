@@ -21,7 +21,7 @@ class Player {
           placed = true;
         // eslint-disable-next-line no-unused-vars
         } catch (error) {
-          // ignore error
+          // Ignore error
         }
       }
     });

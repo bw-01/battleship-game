@@ -31,7 +31,7 @@ describe.skip("Ship Class Tests", () => {
   });
 });
 
-describe.skip("Gameboard Tests", () => {
+describe("Gameboard Class Tests", () => {
   let gameboard;
   let ship;
 
@@ -63,7 +63,7 @@ describe.skip("Gameboard Tests", () => {
 
     expect(gameboard.receiveAttack(x, y)).toBe(false);
     expect(ship.hits).toBe(0);
-    expect(gameboard.grid[x][y].beenHit).toBe(true);
+    expect(gameboard.grid[x][y].alreadyHit).toBe(true);
   });
 
   test("Check board reports not all ships have sunk", () => {
@@ -80,11 +80,59 @@ describe.skip("Gameboard Tests", () => {
   });
 });
 
-describe("Player Tests", () => {
-  test("Creating a new player", () => {
-    const player1 = new Player("Bob", false);
+describe("Player Class Tests", () => {
+  let player;
+  const SHIPS = [
+    { name: "Destroyer", length: 3 },
+    { name: "Submarine", length: 3 },
+    { name: "Battleship", length: 4 },
+  ];
 
-    expect(player1.name).toBe("Bob");
-    expect(player1.cpuPlayer).toBe(false);
+  beforeEach(() => {
+    player = new Player("TestPlayer", false);
+  });
+
+  test("Creating a new player", () => {
+    expect(player.name).toBe("TestPlayer");
+    expect(player.cpuPlayer).toBe(false);
+  });
+
+  test("placeShipsRandomly places all ships on the board", () => {
+    player.placeShipsRandomly(SHIPS);
+
+    SHIPS.forEach((ship) => {
+      let shipFound = false;
+
+      for (let x = 0; x < player.gameboard.size; x++) {
+        for (let y = 0; y < player.gameboard.size; y++) {
+          const cell = player.gameboard.grid[x][y];
+
+          if (cell.ship && cell.ship.name === ship.name && cell.ship.length === ship.length) {
+            shipFound = true;
+            break;
+          }
+        }
+        if (shipFound) break;
+      }
+
+      expect(shipFound).toBe(true);
+    });
+  });
+
+  test("Ships are not placed overlapping each other", () => {
+    player.placeShipsRandomly(SHIPS);
+
+    const occupiedCoordinates = new Set();
+
+    for (let x = 0; x < player.gameboard.size; x++) {
+      for (let y = 0; y < player.gameboard.size; y++) {
+        const cell = player.gameboard.grid[x][y];
+        if (cell.ship) {
+          const coord = `${x},${y}`;
+          expect(occupiedCoordinates.has(coord)).toBe(false);
+          occupiedCoordinates.add(coord);
+        }
+      }
+    }
   });
 });
